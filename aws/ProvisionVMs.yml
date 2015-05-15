@@ -1,0 +1,19 @@
+---
+- name: AnsibleFriday | VM | Create VMs
+  local_action:
+   module: ec2
+   ec2_url: ec2.us-west-2.amazonaws.com
+   region: "{{region}}"
+   key_name: "AnsibleFriday"
+   group_id: "{{ ec2_sg_public.group_id }}"
+   instance_type: "{{instance_type}}"
+   image: "{{image}}"
+   wait: yes
+   wait_timeout: 500
+   private_ip: "10.0.1.{{item}}"
+   instance_tags:
+    Name: "node{{item}}"
+   monitoring: no
+   vpc_subnet_id: '{% for item in vpc.subnets %}{% if item.resource_tags.Tier == "Web" %}{{ item.id }}{% endif %}{% endfor %}'
+   assign_public_ip: yes
+  with_sequence: start={{servers_count_start}} end={{servers_count_end}} format=%d

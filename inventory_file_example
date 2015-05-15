@@ -1,0 +1,41 @@
+localhost
+
+mail.example.com
+
+# Non default port
+badwolf.example.com:5309
+
+[webservers]
+web1.example.com
+
+# Connection type and user on a per host basis
+web2.example.com ansible_connection=ssh ansible_ssh_user=spongebob
+
+# Example for Host Variables
+web3.example.com http_port=80 maxRequestsPerChild=808
+webserver[20:50].example.com
+
+
+[databases-mysql]
+one.example.com
+two.example.com
+three.example.com
+
+
+[databases-postgresql]
+db-[a:f].example.com
+
+
+[webservers:vars]
+ntp_server=ntp.atlanta.example.com
+proxy=proxy.atlanta.example.com
+
+
+# Groups of Groups
+[dc1:children]
+webservers
+databases-mysql
+
+
+[dc2:children]
+databases-postgresql

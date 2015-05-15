@@ -1,0 +1,23 @@
+---
+- name: Datacenter Provision Play
+  hosts: localhost
+  gather_facts: False
+  vars:
+   region: us-west-2
+   region_az: us-west-2a
+   instance_type: t2.micro
+   image: ami-5189a661
+   servers_count_start: 10
+   servers_count_end: 18
+
+  tasks:
+  - name: AnsibleFriday | Upload SSH Public Key
+    local_action:
+     module: ec2_key
+     name: 'AnsibleFriday'
+     key_material: "{{ item }}"
+     region: '{{ region }}'
+    with_file: /etc/ansible/AnsibleFriday/aws/id_rsa.pub
+
+  - include: ProvisionNetwork.yml
+  - include: ProvisionVMs.yml
